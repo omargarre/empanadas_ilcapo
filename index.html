@@ -38,7 +38,8 @@
       font-size: 1.4rem;
     }
 
-    .top-actions {
+    .top-actions,
+    .detail-actions {
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
@@ -68,6 +69,12 @@
     .btn-copy {
       background: #f59e0b;
       color: #111827;
+      display: none;
+    }
+
+    .btn-copy-detail {
+      background: #a855f7;
+      color: #ffffff;
       display: none;
     }
 
@@ -177,6 +184,7 @@
       background: #1f2937;
       border-radius: 12px;
       padding: 12px;
+      margin-bottom: 14px;
     }
 
     .result-box h2 {
@@ -218,11 +226,13 @@
         font-size: 1.2rem;
       }
 
-      .top-actions {
+      .top-actions,
+      .detail-actions {
         flex-direction: column;
       }
 
-      .top-actions button {
+      .top-actions button,
+      .detail-actions button {
         width: 100%;
       }
 
@@ -254,7 +264,13 @@
     <div class="top-actions">
       <button class="btn-primary" onclick="agregarPersona()">+ Agregar persona</button>
       <button class="btn-secondary" onclick="generarPedido()">Generar pedido</button>
-      <button class="btn-copy" id="btnCopiar" onclick="copiarPedido()">Copiar pedido</button>
+      <button
+        class="btn-copy"
+        id="btnCopiarWhatsapp"
+        onclick="copiarPedidoWhatsapp()"
+      >
+        Copiar pedido para WhatsApp Il Capo
+      </button>
     </div>
 
     <div class="table-wrap">
@@ -269,10 +285,27 @@
     </div>
 
     <div class="result-box">
-      <h2>Pedido listo para mandar</h2>
+      <h2>Pedido para mandar</h2>
       <div class="total-box" id="totalVisible"></div>
-      <div class="hint">Tocá “Generar pedido” para armar el texto.</div>
-      <textarea id="resultado" placeholder="Acá va a aparecer el pedido..."></textarea>
+      <div class="hint">Este es el texto sin nombres, listo para enviar al local.</div>
+      <textarea id="resultadoWhatsapp" placeholder="Acá va a aparecer el pedido para enviar..."></textarea>
+    </div>
+
+    <div class="result-box">
+      <h2>Detalle interno con nombres</h2>
+      <div class="hint">Este detalle es para revisar quién pidió cada cosa.</div>
+
+      <div class="detail-actions">
+        <button
+          class="btn-copy-detail"
+          id="btnCopiarDetalle"
+          onclick="copiarDetalleConNombres()"
+        >
+          Copiar detalle con nombres
+        </button>
+      </div>
+
+      <textarea id="resultadoDetalle" placeholder="Acá va a aparecer el detalle con nombres..."></textarea>
     </div>
   </div>
 
@@ -383,6 +416,7 @@
       }
 
       document.getElementById(`val-${row}-${col}`).textContent = cantidades[row][col];
+      ocultarPedidosGenerados();
     }
 
     function agregarPersona() {
@@ -392,7 +426,7 @@
       const nombreLimpio = nombre.trim();
       const nuevasPersonas = [...personas, nombreLimpio];
       reconstruirCantidadesConPersonas(nuevasPersonas);
-      ocultarPedidoGenerado();
+      ocultarPedidosGenerados();
       renderTabla();
     }
 
@@ -408,43 +442,61 @@
 
       const nuevasPersonas = personas.filter((_, i) => i !== index);
       reconstruirCantidadesConPersonas(nuevasPersonas);
-      ocultarPedidoGenerado();
+      ocultarPedidosGenerados();
       renderTabla();
     }
 
     function generarPedido() {
-      let texto = "Pedido de empanadas:\n\n";
+      let textoWhatsapp = "Pedido de empanadas:\n\n";
+      let textoDetalle = "Detalle del pedido:\n\n";
       let totalGeneral = 0;
 
       variedades.forEach((variedad, row) => {
         let totalVariedad = 0;
+        let detallePersonas = [];
 
-        personas.forEach((_, col) => {
+        personas.forEach((persona, col) => {
           const cant = cantidades[row][col];
           totalVariedad += cant;
+
+          if (cant > 0) {
+            detallePersonas.push(`${persona}: ${cant}`);
+          }
         });
 
         if (totalVariedad > 0) {
-          texto += `${variedad}: ${totalVariedad}\n`;
+          textoWhatsapp += `${variedad}: ${totalVariedad}\n`;
+          textoDetalle += `${variedad}: ${totalVariedad}`;
+
+          if (detallePersonas.length > 0) {
+            textoDetalle += ` (${detallePersonas.join(", ")})`;
+          }
+
+          textoDetalle += "\n";
           totalGeneral += totalVariedad;
         }
       });
 
-      texto += `\nTotal de empanadas: ${totalGeneral}`;
+      textoWhatsapp += `\nTotal de empanadas: ${totalGeneral}`;
+      textoDetalle += `\nTotal de empanadas: ${totalGeneral}`;
 
-      document.getElementById("resultado").value = texto;
+      document.getElementById("resultadoWhatsapp").value = textoWhatsapp;
+      document.getElementById("resultadoDetalle").value = textoDetalle;
       document.getElementById("totalVisible").textContent = `Total de empanadas: ${totalGeneral}`;
-      document.getElementById("btnCopiar").style.display = "inline-block";
+      document.getElementById("btnCopiarWhatsapp").style.display = "inline-block";
+      document.getElementById("btnCopiarDetalle").style.display = "inline-block";
     }
 
-    function ocultarPedidoGenerado() {
-      document.getElementById("resultado").value = "";
+    function ocultarPedidosGenerados() {
+      document.getElementById("resultadoWhatsapp").value = "";
+      document.getElementById("resultadoDetalle").value = "";
       document.getElementById("totalVisible").textContent = "";
-      document.getElementById("btnCopiar").style.display = "none";
+      document.getElementById("btnCopiarWhatsapp").style.display = "none";
+      document.getElementById("btnCopiarDetalle").style.display = "none";
     }
 
-    async function copiarPedido() {
-      const texto = document.getElementById("resultado").value.trim();
+    async function copiarPedidoWhatsapp() {
+      const texto = document.getElementById("resultadoWhatsapp").value.trim();
 
       if (!texto) {
         alert("Primero generá el pedido.");
@@ -453,7 +505,23 @@
 
       try {
         await navigator.clipboard.writeText(texto);
-        alert("Pedido copiado.");
+        alert("Pedido para WhatsApp copiado.");
+      } catch (error) {
+        alert("No se pudo copiar automáticamente. Copialo manualmente del cuadro.");
+      }
+    }
+
+    async function copiarDetalleConNombres() {
+      const texto = document.getElementById("resultadoDetalle").value.trim();
+
+      if (!texto) {
+        alert("Primero generá el pedido.");
+        return;
+      }
+
+      try {
+        await navigator.clipboard.writeText(texto);
+        alert("Detalle con nombres copiado.");
       } catch (error) {
         alert("No se pudo copiar automáticamente. Copialo manualmente del cuadro.");
       }
