@@ -115,7 +115,34 @@
     }
 
     .persona-header {
-      min-width: 90px;
+      min-width: 110px;
+    }
+
+    .persona-header-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .persona-nombre {
+      display: inline-block;
+      max-width: 70px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .btn-delete-person {
+      background: #dc2626;
+      color: white;
+      width: 24px;
+      height: 24px;
+      padding: 0;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      line-height: 1;
+      flex-shrink: 0;
     }
 
     .counter {
@@ -213,6 +240,10 @@
       textarea {
         min-height: 260px;
       }
+
+      .persona-nombre {
+        max-width: 56px;
+      }
     }
   </style>
 </head>
@@ -280,13 +311,42 @@
       }
     }
 
+    function reconstruirCantidadesConPersonas(newPersonas) {
+      const nuevasCantidades = {};
+
+      for (let i = 0; i < variedades.length; i++) {
+        nuevasCantidades[i] = {};
+        for (let j = 0; j < newPersonas.length; j++) {
+          const nombre = newPersonas[j];
+          const indiceViejo = personas.indexOf(nombre);
+          nuevasCantidades[i][j] = indiceViejo >= 0 ? cantidades[i][indiceViejo] || 0 : 0;
+        }
+      }
+
+      personas = [...newPersonas];
+      cantidades = nuevasCantidades;
+    }
+
     function renderTabla() {
       const header = document.getElementById("header");
       const body = document.getElementById("body");
 
       header.innerHTML = "<th>Variedad</th>";
-      personas.forEach((persona) => {
-        header.innerHTML += `<th class="persona-header">${persona}</th>`;
+
+      personas.forEach((persona, index) => {
+        header.innerHTML += `
+          <th class="persona-header">
+            <div class="persona-header-wrap">
+              <span class="persona-nombre" title="${persona}">${persona}</span>
+              <button
+                type="button"
+                class="btn-delete-person"
+                onclick="eliminarPersona(${index})"
+                title="Eliminar persona"
+              >×</button>
+            </div>
+          </th>
+        `;
       });
 
       body.innerHTML = "";
@@ -299,7 +359,7 @@
             <td>
               <div class="counter">
                 <button type="button" onclick="cambiarCantidad(${row}, ${col}, -1, event)">-</button>
-                <span id="val-${row}-${col}">0</span>
+                <span id="val-${row}-${col}">${cantidades[row][col] || 0}</span>
                 <button type="button" onclick="cambiarCantidad(${row}, ${col}, 1, event)">+</button>
               </div>
             </td>
@@ -329,12 +389,26 @@
       const nombre = prompt("Nombre de la persona:");
       if (!nombre || !nombre.trim()) return;
 
-      personas.push(nombre.trim());
+      const nombreLimpio = nombre.trim();
+      const nuevasPersonas = [...personas, nombreLimpio];
+      reconstruirCantidadesConPersonas(nuevasPersonas);
+      ocultarPedidoGenerado();
+      renderTabla();
+    }
 
-      for (let i = 0; i < variedades.length; i++) {
-        cantidades[i][personas.length - 1] = 0;
+    function eliminarPersona(index) {
+      if (personas.length === 1) {
+        alert("Debe quedar al menos una persona.");
+        return;
       }
 
+      const nombre = personas[index];
+      const confirmar = confirm(`¿Eliminar a ${nombre}?`);
+      if (!confirmar) return;
+
+      const nuevasPersonas = personas.filter((_, i) => i !== index);
+      reconstruirCantidadesConPersonas(nuevasPersonas);
+      ocultarPedidoGenerado();
       renderTabla();
     }
 
@@ -344,23 +418,14 @@
 
       variedades.forEach((variedad, row) => {
         let totalVariedad = 0;
-        let detallePersonas = [];
 
-        personas.forEach((persona, col) => {
+        personas.forEach((_, col) => {
           const cant = cantidades[row][col];
           totalVariedad += cant;
-
-          if (cant > 0) {
-            detallePersonas.push(`${persona}: ${cant}`);
-          }
         });
 
         if (totalVariedad > 0) {
-          texto += `${variedad}: ${totalVariedad}`;
-          if (detallePersonas.length > 0) {
-            texto += ` (${detallePersonas.join(", ")})`;
-          }
-          texto += "\n";
+          texto += `${variedad}: ${totalVariedad}\n`;
           totalGeneral += totalVariedad;
         }
       });
@@ -370,6 +435,12 @@
       document.getElementById("resultado").value = texto;
       document.getElementById("totalVisible").textContent = `Total de empanadas: ${totalGeneral}`;
       document.getElementById("btnCopiar").style.display = "inline-block";
+    }
+
+    function ocultarPedidoGenerado() {
+      document.getElementById("resultado").value = "";
+      document.getElementById("totalVisible").textContent = "";
+      document.getElementById("btnCopiar").style.display = "none";
     }
 
     async function copiarPedido() {
@@ -388,7 +459,6 @@
       }
     }
 
-    // Evita zoom por doble toque en iPhone / algunos navegadores móviles
     let lastTouchEnd = 0;
     document.addEventListener("touchend", function (event) {
       const now = Date.now();
