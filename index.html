@@ -107,15 +107,18 @@
       font-size: 0.95rem;
     }
 
-    td:first-child,
-    th:first-child {
-      text-align: left;
-      min-width: 210px;
-      position: sticky;
-      left: 0;
-      background: #172033;
-      z-index: 2;
-    }
+td:first-child,
+th:first-child {
+  text-align: left;
+  min-width: 130px;   /* 👈 antes 210 */
+  max-width: 140px;
+  white-space: normal;
+  word-break: break-word;
+  position: sticky;
+  left: 0;
+  background: #172033;
+  z-index: 2;
+}
 
     th:first-child {
       background: #0f172a;
@@ -238,7 +241,7 @@
 
       td:first-child,
       th:first-child {
-        min-width: 170px;
+        min-width: 110px;
       }
 
       .counter button {
