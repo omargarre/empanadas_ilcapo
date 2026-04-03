@@ -2,10 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-  />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <title>Pedido Il Capo di Tutti</title>
 
   <style>
@@ -14,530 +11,288 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    html, body {
+    body {
       margin: 0;
-      padding: 0;
       font-family: Arial, Helvetica, sans-serif;
       background: #111827;
       color: #f9fafb;
-    }
-
-    body {
       padding: 10px;
     }
 
-    .container {
-      width: 100%;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
     h1 {
-      margin: 0 0 12px 0;
       text-align: center;
       font-size: 1.4rem;
+      margin-bottom: 12px;
     }
 
-    .top-actions,
-    .detail-actions {
+    .top-actions, .detail-actions {
       display: flex;
-      gap: 10px;
       flex-wrap: wrap;
+      gap: 10px;
       margin-bottom: 12px;
     }
 
     button {
       border: none;
       border-radius: 10px;
-      padding: 12px 14px;
+      padding: 12px;
       font-size: 1rem;
       font-weight: bold;
       cursor: pointer;
       touch-action: manipulation;
     }
 
-    .btn-primary {
-      background: #22c55e;
-      color: #111827;
-    }
-
-    .btn-secondary {
-      background: #2563eb;
-      color: #ffffff;
-    }
-
-    .btn-copy {
-      background: #f59e0b;
-      color: #111827;
-      display: none;
-    }
-
-    .btn-copy-detail {
-      background: #a855f7;
-      color: #ffffff;
-      display: none;
-    }
+    .btn-primary { background:#22c55e; color:#111; }
+    .btn-secondary { background:#2563eb; color:#fff; }
+    .btn-copy { background:#f59e0b; color:#111; display:none; }
+    .btn-copy-detail { background:#a855f7; color:#fff; display:none; }
+    .btn-danger { background:#ef4444; color:#fff; }
 
     .table-wrap {
-      overflow-x: auto;
-      background: #1f2937;
-      border-radius: 12px;
-      padding: 8px;
-      margin-bottom: 14px;
-      width: 100%;
+      overflow-x:auto;
+      background:#1f2937;
+      border-radius:12px;
+      padding:8px;
+      margin-bottom:14px;
     }
 
     table {
-      width: 100%;
-      min-width: 760px;
+      width:100%;
+      min-width:760px;
       border-collapse: collapse;
     }
 
     th, td {
-      border: 1px solid #374151;
-      padding: 8px 6px;
-      text-align: center;
+      border:1px solid #374151;
+      padding:8px;
+      text-align:center;
     }
 
     th {
-      background: #0f172a;
-      position: sticky;
-      top: 0;
-      z-index: 1;
-      font-size: 0.95rem;
+      background:#0f172a;
+      position:sticky;
+      top:0;
     }
 
-    td:first-child,
-    th:first-child {
-      text-align: left;
-      min-width: 210px;
-      position: sticky;
-      left: 0;
-      background: #172033;
-      z-index: 2;
-    }
-
-    th:first-child {
-      background: #0f172a;
-    }
-
-    .persona-header {
-      min-width: 110px;
-    }
-
-    .persona-header-wrap {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-    }
-
-    .persona-nombre {
-      display: inline-block;
-      max-width: 70px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .btn-delete-person {
-      background: #dc2626;
-      color: white;
-      width: 24px;
-      height: 24px;
-      padding: 0;
-      border-radius: 6px;
-      font-size: 0.9rem;
-      line-height: 1;
-      flex-shrink: 0;
+    td:first-child, th:first-child {
+      text-align:left;
+      min-width:200px;
+      position:sticky;
+      left:0;
+      background:#172033;
     }
 
     .counter {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:6px;
     }
 
     .counter button {
-      width: 38px;
-      height: 38px;
-      padding: 0;
-      font-size: 1.2rem;
-      border-radius: 8px;
-      background: #374151;
-      color: #fff;
-      flex-shrink: 0;
-      user-select: none;
-      -webkit-user-select: none;
-      touch-action: manipulation;
-    }
-
-    .counter span {
-      min-width: 24px;
-      display: inline-block;
-      font-size: 1rem;
-      font-weight: bold;
-    }
-
-    .result-box {
-      background: #1f2937;
-      border-radius: 12px;
-      padding: 12px;
-      margin-bottom: 14px;
-    }
-
-    .result-box h2 {
-      margin: 0 0 10px 0;
-      font-size: 1.1rem;
-    }
-
-    .total-box {
-      font-size: 1.1rem;
-      font-weight: bold;
-      margin-bottom: 10px;
-      color: #93c5fd;
-    }
-
-    .hint {
-      font-size: 0.92rem;
-      color: #d1d5db;
-      margin-bottom: 10px;
+      width:36px;
+      height:36px;
+      background:#374151;
+      color:#fff;
+      font-size:1.2rem;
+      border-radius:8px;
     }
 
     textarea {
-      width: 100%;
-      min-height: 220px;
-      border: none;
-      border-radius: 10px;
-      padding: 12px;
-      font-size: 1rem;
-      resize: vertical;
-      background: #f9fafb;
-      color: #111827;
+      width:100%;
+      min-height:180px;
+      border-radius:10px;
+      padding:10px;
+      font-size:1rem;
     }
 
-    @media (max-width: 700px) {
-      body {
-        padding: 8px;
-      }
+    .result-box {
+      background:#1f2937;
+      border-radius:12px;
+      padding:12px;
+      margin-bottom:12px;
+    }
 
-      h1 {
-        font-size: 1.2rem;
-      }
-
-      .top-actions,
-      .detail-actions {
-        flex-direction: column;
-      }
-
-      .top-actions button,
-      .detail-actions button {
-        width: 100%;
-      }
-
-      td:first-child,
-      th:first-child {
-        min-width: 170px;
-      }
-
-      .counter button {
-        width: 40px;
-        height: 40px;
-        font-size: 1.25rem;
-      }
-
-      textarea {
-        min-height: 260px;
-      }
-
-      .persona-nombre {
-        max-width: 56px;
-      }
+    .total-box {
+      font-weight:bold;
+      margin-bottom:8px;
+      color:#93c5fd;
     }
   </style>
 </head>
+
 <body>
-  <div class="container">
-    <h1>Pedido Il Capo di Tutti</h1>
 
-    <div class="top-actions">
-      <button class="btn-primary" onclick="agregarPersona()">+ Agregar persona</button>
-      <button class="btn-secondary" onclick="generarPedido()">Generar pedido</button>
-      <button
-        class="btn-copy"
-        id="btnCopiarWhatsapp"
-        onclick="copiarPedidoWhatsapp()"
-      >
-        Copiar pedido para WhatsApp Il Capo
-      </button>
-    </div>
+<h1>Pedido Il Capo di Tutti</h1>
 
-    <div class="table-wrap">
-      <table id="tabla">
-        <thead>
-          <tr id="header">
-            <th>Variedad</th>
-          </tr>
-        </thead>
-        <tbody id="body"></tbody>
-      </table>
-    </div>
+<div class="top-actions">
+  <button class="btn-primary" onclick="agregarPersona()">+ Agregar persona</button>
+  <button class="btn-secondary" onclick="generarPedido()">Generar pedido</button>
+  <button class="btn-copy" id="btnCopiarWhatsapp" onclick="copiarPedidoWhatsapp()">Copiar pedido WhatsApp</button>
+  <button class="btn-danger" onclick="limpiarPersonas()">Limpiar personas</button>
+</div>
 
-    <div class="result-box">
-      <h2>Pedido para mandar</h2>
-      <div class="total-box" id="totalVisible"></div>
-      <div class="hint">Este es el texto sin nombres, listo para enviar al local.</div>
-      <textarea id="resultadoWhatsapp" placeholder="Acá va a aparecer el pedido para enviar..."></textarea>
-    </div>
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr id="header"><th>Variedad</th></tr>
+    </thead>
+    <tbody id="body"></tbody>
+  </table>
+</div>
 
-    <div class="result-box">
-      <h2>Detalle interno con nombres</h2>
-      <div class="hint">Este detalle es para revisar quién pidió cada cosa.</div>
+<div class="result-box">
+  <h3>Pedido para enviar</h3>
+  <div class="total-box" id="totalVisible"></div>
+  <textarea id="resultadoWhatsapp"></textarea>
+</div>
 
-      <div class="detail-actions">
-        <button
-          class="btn-copy-detail"
-          id="btnCopiarDetalle"
-          onclick="copiarDetalleConNombres()"
-        >
-          Copiar detalle con nombres
-        </button>
-      </div>
-
-      <textarea id="resultadoDetalle" placeholder="Acá va a aparecer el detalle con nombres..."></textarea>
-    </div>
+<div class="result-box">
+  <h3>Detalle con nombres</h3>
+  <div class="detail-actions">
+    <button class="btn-copy-detail" id="btnCopiarDetalle" onclick="copiarDetalle()">Copiar detalle</button>
   </div>
+  <textarea id="resultadoDetalle"></textarea>
+</div>
 
-  <script>
-    const variedades = [
-      "Queso y Cebolla",
-      "Jamón y Queso",
-      "Pollo",
-      "Napolitana",
-      "Roquefort",
-      "Cuatro Quesos",
-      "Champiñón Jamón y Ananá",
-      "Prov y Panceta",
-      "Carne",
-      "Carne Picante",
-      "Verdura",
-      "Choclo",
-      "Calabresa",
-      "Palmitos con Jamón",
-      "Capresse",
-      "Cheddar y Panceta",
-      "Calabresa y Mozzarella",
-      "Jamón"
-    ];
+<script>
+const variedades = [
+  "Queso y Cebolla","Jamón y Queso","Pollo","Napolitana","Roquefort",
+  "Cuatro Quesos","Champiñón Jamón y Ananá","Provolone y Panceta",
+  "Carne","Carne Picante","Verdura","Choclo"
+];
 
-    let personas = ["Claudia", "Garre", "Fran", "Valen", "Flor", "Martu"];
-    let cantidades = {};
+let personas = [];
+let cantidades = {};
 
-    function inicializarDatos() {
-      cantidades = {};
-      for (let i = 0; i < variedades.length; i++) {
-        cantidades[i] = {};
-        for (let j = 0; j < personas.length; j++) {
-          cantidades[i][j] = 0;
-        }
-      }
+function init(){
+  cantidades = {};
+  variedades.forEach((_,i)=>{
+    cantidades[i]={};
+  });
+}
+
+function render(){
+  const header = document.getElementById("header");
+  const body = document.getElementById("body");
+
+  header.innerHTML = "<th>Variedad</th>";
+  personas.forEach((p,i)=>{
+    header.innerHTML += `<th>${p} <button onclick="eliminarPersona(${i})">x</button></th>`;
+  });
+
+  body.innerHTML="";
+
+  variedades.forEach((v,row)=>{
+    let fila = `<tr><td>${v}</td>`;
+    personas.forEach((_,col)=>{
+      if(!cantidades[row][col]) cantidades[row][col]=0;
+
+      fila += `
+      <td>
+        <div class="counter">
+          <button onclick="cambiar(${row},${col},-1)">-</button>
+          <span id="v-${row}-${col}">${cantidades[row][col]}</span>
+          <button onclick="cambiar(${row},${col},1)">+</button>
+        </div>
+      </td>`;
+    });
+    fila+="</tr>";
+    body.innerHTML+=fila;
+  });
+}
+
+function cambiar(r,c,d){
+  cantidades[r][c]+=d;
+  if(cantidades[r][c]<0) cantidades[r][c]=0;
+  document.getElementById(`v-${r}-${c}`).innerText=cantidades[r][c];
+  limpiarResultados();
+}
+
+function agregarPersona(){
+  let n=prompt("Nombre:");
+  if(!n) return;
+  personas.push(n);
+  render();
+}
+
+function eliminarPersona(i){
+  personas.splice(i,1);
+  render();
+  limpiarResultados();
+}
+
+function limpiarPersonas(){
+  if(!confirm("Eliminar todas las personas?")) return;
+  personas=[];
+  cantidades={};
+  init();
+  render();
+  limpiarResultados();
+}
+
+function generarPedido(){
+  let txt="Pedido de empanadas:\n\n";
+  let detalle="Detalle:\n\n";
+  let total=0;
+
+  variedades.forEach((v,r)=>{
+    let suma=0;
+    let det=[];
+
+    personas.forEach((p,c)=>{
+      let val=cantidades[r][c]||0;
+      suma+=val;
+      if(val>0) det.push(`${p}:${val}`);
+    });
+
+    if(suma>0){
+      txt+=`${v}: ${suma}\n`;
+      detalle+=`${v}: ${suma} (${det.join(", ")})\n`;
+      total+=suma;
     }
+  });
 
-    function reconstruirCantidadesConPersonas(newPersonas) {
-      const nuevasCantidades = {};
+  txt+=`\nTotal: ${total}`;
+  detalle+=`\nTotal: ${total}`;
 
-      for (let i = 0; i < variedades.length; i++) {
-        nuevasCantidades[i] = {};
-        for (let j = 0; j < newPersonas.length; j++) {
-          const nombre = newPersonas[j];
-          const indiceViejo = personas.indexOf(nombre);
-          nuevasCantidades[i][j] = indiceViejo >= 0 ? cantidades[i][indiceViejo] || 0 : 0;
-        }
-      }
+  document.getElementById("resultadoWhatsapp").value=txt;
+  document.getElementById("resultadoDetalle").value=detalle;
+  document.getElementById("totalVisible").innerText="Total: "+total;
 
-      personas = [...newPersonas];
-      cantidades = nuevasCantidades;
-    }
+  document.getElementById("btnCopiarWhatsapp").style.display="inline-block";
+  document.getElementById("btnCopiarDetalle").style.display="inline-block";
+}
 
-    function renderTabla() {
-      const header = document.getElementById("header");
-      const body = document.getElementById("body");
+function limpiarResultados(){
+  document.getElementById("resultadoWhatsapp").value="";
+  document.getElementById("resultadoDetalle").value="";
+  document.getElementById("btnCopiarWhatsapp").style.display="none";
+  document.getElementById("btnCopiarDetalle").style.display="none";
+  document.getElementById("totalVisible").innerText="";
+}
 
-      header.innerHTML = "<th>Variedad</th>";
+async function copiarPedidoWhatsapp(){
+  await navigator.clipboard.writeText(document.getElementById("resultadoWhatsapp").value);
+  alert("Copiado");
+}
 
-      personas.forEach((persona, index) => {
-        header.innerHTML += `
-          <th class="persona-header">
-            <div class="persona-header-wrap">
-              <span class="persona-nombre" title="${persona}">${persona}</span>
-              <button
-                type="button"
-                class="btn-delete-person"
-                onclick="eliminarPersona(${index})"
-                title="Eliminar persona"
-              >×</button>
-            </div>
-          </th>
-        `;
-      });
+async function copiarDetalle(){
+  await navigator.clipboard.writeText(document.getElementById("resultadoDetalle").value);
+  alert("Copiado");
+}
 
-      body.innerHTML = "";
+// evita zoom doble tap
+let last=0;
+document.addEventListener("touchend",e=>{
+  let now=Date.now();
+  if(now-last<300)e.preventDefault();
+  last=now;
+},{passive:false});
 
-      variedades.forEach((variedad, row) => {
-        let fila = `<tr><td>${variedad}</td>`;
+init();
+render();
+</script>
 
-        personas.forEach((_, col) => {
-          fila += `
-            <td>
-              <div class="counter">
-                <button type="button" onclick="cambiarCantidad(${row}, ${col}, -1, event)">-</button>
-                <span id="val-${row}-${col}">${cantidades[row][col] || 0}</span>
-                <button type="button" onclick="cambiarCantidad(${row}, ${col}, 1, event)">+</button>
-              </div>
-            </td>
-          `;
-        });
-
-        fila += `</tr>`;
-        body.innerHTML += fila;
-      });
-    }
-
-    function cambiarCantidad(row, col, delta, event) {
-      if (event) {
-        event.preventDefault();
-      }
-
-      cantidades[row][col] += delta;
-
-      if (cantidades[row][col] < 0) {
-        cantidades[row][col] = 0;
-      }
-
-      document.getElementById(`val-${row}-${col}`).textContent = cantidades[row][col];
-      ocultarPedidosGenerados();
-    }
-
-    function agregarPersona() {
-      const nombre = prompt("Nombre de la persona:");
-      if (!nombre || !nombre.trim()) return;
-
-      const nombreLimpio = nombre.trim();
-      const nuevasPersonas = [...personas, nombreLimpio];
-      reconstruirCantidadesConPersonas(nuevasPersonas);
-      ocultarPedidosGenerados();
-      renderTabla();
-    }
-
-    function eliminarPersona(index) {
-      if (personas.length === 1) {
-        alert("Debe quedar al menos una persona.");
-        return;
-      }
-
-      const nombre = personas[index];
-      const confirmar = confirm(`¿Eliminar a ${nombre}?`);
-      if (!confirmar) return;
-
-      const nuevasPersonas = personas.filter((_, i) => i !== index);
-      reconstruirCantidadesConPersonas(nuevasPersonas);
-      ocultarPedidosGenerados();
-      renderTabla();
-    }
-
-    function generarPedido() {
-      let textoWhatsapp = "Pedido de empanadas:\n\n";
-      let textoDetalle = "Detalle del pedido:\n\n";
-      let totalGeneral = 0;
-
-      variedades.forEach((variedad, row) => {
-        let totalVariedad = 0;
-        let detallePersonas = [];
-
-        personas.forEach((persona, col) => {
-          const cant = cantidades[row][col];
-          totalVariedad += cant;
-
-          if (cant > 0) {
-            detallePersonas.push(`${persona}: ${cant}`);
-          }
-        });
-
-        if (totalVariedad > 0) {
-          textoWhatsapp += `${variedad}: ${totalVariedad}\n`;
-          textoDetalle += `${variedad}: ${totalVariedad}`;
-
-          if (detallePersonas.length > 0) {
-            textoDetalle += ` (${detallePersonas.join(", ")})`;
-          }
-
-          textoDetalle += "\n";
-          totalGeneral += totalVariedad;
-        }
-      });
-
-      textoWhatsapp += `\nTotal de empanadas: ${totalGeneral}`;
-      textoDetalle += `\nTotal de empanadas: ${totalGeneral}`;
-
-      document.getElementById("resultadoWhatsapp").value = textoWhatsapp;
-      document.getElementById("resultadoDetalle").value = textoDetalle;
-      document.getElementById("totalVisible").textContent = `Total de empanadas: ${totalGeneral}`;
-      document.getElementById("btnCopiarWhatsapp").style.display = "inline-block";
-      document.getElementById("btnCopiarDetalle").style.display = "inline-block";
-    }
-
-    function ocultarPedidosGenerados() {
-      document.getElementById("resultadoWhatsapp").value = "";
-      document.getElementById("resultadoDetalle").value = "";
-      document.getElementById("totalVisible").textContent = "";
-      document.getElementById("btnCopiarWhatsapp").style.display = "none";
-      document.getElementById("btnCopiarDetalle").style.display = "none";
-    }
-
-    async function copiarPedidoWhatsapp() {
-      const texto = document.getElementById("resultadoWhatsapp").value.trim();
-
-      if (!texto) {
-        alert("Primero generá el pedido.");
-        return;
-      }
-
-      try {
-        await navigator.clipboard.writeText(texto);
-        alert("Pedido para WhatsApp copiado.");
-      } catch (error) {
-        alert("No se pudo copiar automáticamente. Copialo manualmente del cuadro.");
-      }
-    }
-
-    async function copiarDetalleConNombres() {
-      const texto = document.getElementById("resultadoDetalle").value.trim();
-
-      if (!texto) {
-        alert("Primero generá el pedido.");
-        return;
-      }
-
-      try {
-        await navigator.clipboard.writeText(texto);
-        alert("Detalle con nombres copiado.");
-      } catch (error) {
-        alert("No se pudo copiar automáticamente. Copialo manualmente del cuadro.");
-      }
-    }
-
-    let lastTouchEnd = 0;
-    document.addEventListener("touchend", function (event) {
-      const now = Date.now();
-      if (now - lastTouchEnd <= 300) {
-        event.preventDefault();
-      }
-      lastTouchEnd = now;
-    }, { passive: false });
-
-    inicializarDatos();
-    renderTabla();
-  </script>
 </body>
 </html>
