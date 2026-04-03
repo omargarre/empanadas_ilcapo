@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Pedido Empanadas</title>
+<style>
+  body {
+    font-family: Arial;
+    background: #111827;
+    color: #fff;
+    padding: 20px;
+  }
+  h1 { margin-bottom: 10px; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+
+  th, td {
+    border: 1px solid #374151;
+    padding: 6px;
+    text-align: center;
+  }
+
+  th {
+    background: #1f2937;
+  }
+
+  input {
+    width: 60px;
+    text-align: center;
+  }
+
+  button {
+    margin-top: 10px;
+    padding: 10px;
+    background: #22c55e;
+    border: none;
+    cursor: pointer;
+    color: black;
+    font-weight: bold;
+  }
+
+  textarea {
+    width: 100%;
+    height: 150px;
+    margin-top: 10px;
+  }
+</style>
+</head>
+
+<body>
+
+<h1>Pedido Empanadas / Canastitas</h1>
+
+<button onclick="agregarPersona()">+ Agregar Persona</button>
+
+<table id="tabla">
+  <thead>
+    <tr id="header">
+      <th>Variedad</th>
+    </tr>
+  </thead>
+  <tbody id="body"></tbody>
+</table>
+
+<button onclick="calcular()">Calcular Pedido</button>
+
+<h3>Resultado para copiar:</h3>
+<textarea id="resultado"></textarea>
+
+<script>
+const variedades = [
+  "Queso y Cebolla",
+  "Jamón y Queso",
+  "Pollo",
+  "Roquefort",
+  "Carne",
+  "Carne Picante",
+  "Verdura",
+  "Choclo",
+  "Napolitana",
+  "Cuatro Quesos",
+  "Champiñón Jamón y Ananá",
+  "Provolone y Panceta"
+];
+
+let personas = [];
+
+function renderTabla() {
+  const header = document.getElementById("header");
+  const body = document.getElementById("body");
+
+  header.innerHTML = "<th>Variedad</th>";
+  personas.forEach((p, i) => {
+    header.innerHTML += `<th>${p}</th>`;
+  });
+
+  body.innerHTML = "";
+
+  variedades.forEach((v, row) => {
+    let fila = `<tr><td>${v}</td>`;
+
+    personas.forEach((_, col) => {
+      fila += `<td>
+        <input type="number" min="0" value="0" id="c-${row}-${col}">
+      </td>`;
+    });
+
+    fila += "</tr>";
+    body.innerHTML += fila;
+  });
+}
+
+function agregarPersona() {
+  const nombre = prompt("Nombre de la persona:");
+  if (!nombre) return;
+
+  personas.push(nombre);
+  renderTabla();
+}
+
+function calcular() {
+  let totales = {};
+
+  variedades.forEach((v, row) => {
+    totales[v] = 0;
+
+    personas.forEach((_, col) => {
+      const val = document.getElementById(`c-${row}-${col}`).value;
+      totales[v] += Number(val);
+    });
+  });
+
+  let texto = "Pedido Il Capo di Tutti:\n\n";
+
+  for (let v in totales) {
+    if (totales[v] > 0) {
+      texto += `${v}: ${totales[v]}\n`;
+    }
+  }
+
+  let totalGeneral = Object.values(totales).reduce((a,b)=>a+b,0);
+
+  texto += `\nTOTAL: ${totalGeneral}`;
+
+  document.getElementById("resultado").value = texto;
+}
+</script>
+
+</body>
+</html>
